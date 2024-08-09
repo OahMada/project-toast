@@ -10,8 +10,13 @@ function ToastProvider({ children }) {
 		setToastStack(modifiedToastStack);
 	}
 
-	function addNewToast(newToast) {
-		setToastStack([...toastStack, newToast]);
+	function addNewToast(toastMessage, toastOption) {
+		let newToastToStack = {
+			id: crypto.randomUUID(),
+			toastMessage,
+			toastOption,
+		};
+		setToastStack([...toastStack, newToastToStack]);
 	}
 
 	function dismissAllToast() {
