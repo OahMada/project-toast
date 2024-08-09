@@ -15,14 +15,9 @@ function ToastPlayground() {
 
 	function handleSubmit(e) {
 		e.preventDefault();
-		let newToastToStack = {
-			id: crypto.randomUUID(),
-			toastMessage,
-			toastOption,
-		};
-		addNewToast(newToastToStack);
+		addNewToast(toastMessage, toastOption);
 		setToastMessage('');
-		setToastOption('notice');
+		setToastOption(VARIANT_OPTIONS[0]);
 	}
 
 	return (

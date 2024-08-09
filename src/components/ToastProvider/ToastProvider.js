@@ -5,22 +5,27 @@ export let ToastContext = React.createContext();
 
 function ToastProvider({ children }) {
 	let [toastStack, setToastStack] = React.useState([]);
-	function dismissSingleToast(id) {
-		let modifiedToastStack = toastStack.filter((toast) => toast.id !== id);
-		setToastStack(modifiedToastStack);
-	}
 
-	function addNewToast(newToast) {
-		setToastStack([...toastStack, newToast]);
-	}
+	let dismissSingleToast = React.useCallback((id) => {
+		setToastStack((previousToastStack) => {
+			return previousToastStack.filter((toast) => toast.id !== id);
+		});
+	}, []);
 
-	function dismissAllToast() {
-		setToastStack([]);
-	}
+	let addNewToast = React.useCallback((toastMessage, toastOption) => {
+		let newToastToStack = {
+			id: crypto.randomUUID(),
+			toastMessage,
+			toastOption,
+		};
+		setToastStack((previousToastStack) => [...previousToastStack, newToastToStack]);
+	}, []);
+
+	let dismissAllToast = React.useCallback(() => setToastStack([]), []);
 
 	useEscapeKey(dismissAllToast);
 
-	let value = React.useMemo(() => ({ toastStack, dismissSingleToast, addNewToast }), [toastStack]);
+	let value = React.useMemo(() => ({ toastStack, dismissSingleToast, addNewToast }), [addNewToast, dismissSingleToast, toastStack]);
 
 	return <ToastContext.Provider value={value}>{children}</ToastContext.Provider>;
 }
